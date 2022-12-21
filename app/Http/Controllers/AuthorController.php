@@ -59,6 +59,18 @@ class AuthorController extends Controller
         ]);
     }
 
+    function edit(Request $request, $id){
+
+        $author = Author::find($id);
+        $author->update($request->all());
+
+        return response()->json([
+            "status" => true,
+            "message" => "Data author berhasil diubah",
+            "data" => $author
+        ]);
+    }
+
     function delete($id){
         $author = Author::find($id);
 
