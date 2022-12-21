@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Book extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
     
     // menghubungkan tabel post dengan tabel kategori
     public function category() {
