@@ -62,6 +62,15 @@ class AuthorController extends Controller
     function edit(Request $request, $id){
 
         $author = Author::find($id);
+
+        if (!isset($author)) {
+            return response()->json([
+                "status" => false,
+                "message" => "Author tidak ditemukan",
+                "data" => null
+            ]);
+        }
+
         $author->update($request->all());
 
         return response()->json([
