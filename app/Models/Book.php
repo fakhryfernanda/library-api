@@ -12,14 +12,4 @@ class Book extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    
-    // menghubungkan tabel post dengan tabel kategori
-    // public function category() {
-    //     return $this->belongsTo(Category::class);
-    // }
-
-    // menggunakan nama fungsi author
-    // public function author() {
-    //     return $this->belongsTo(Author::class);
-    // }
 }
