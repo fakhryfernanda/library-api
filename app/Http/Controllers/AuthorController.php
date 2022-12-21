@@ -58,4 +58,23 @@ class AuthorController extends Controller
             ])
         ]);
     }
+
+    function delete($id){
+        $author = Author::find($id);
+
+        if (!isset($author)) {
+            return response()->json([
+                "status" => false,
+                "message" => "Author tidak ditemukan",
+                "data" => null
+            ]);
+        }
+
+        Author::destroy($id);
+
+        return response()->json([
+            "status" => true,
+            "message" => "Author berhasil dihapus"
+        ]);
+    }
 }

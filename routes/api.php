@@ -11,7 +11,7 @@ Route::prefix('book')->group(function(){
     Route::get("/detail/{id}", [BookController::class, "detail"]);
     Route::post("/add", [BookController::class, "store"]);
     Route::put("/update/{id}", [BookController::class, "update"]);
-    Route::delete("/delete/{id}", [BookController::class, "destroy"]);
+    Route::delete("/delete/{id}", [BookController::class, "delete"]);
 });
 
 Route::prefix('category')->group(function(){
@@ -19,7 +19,7 @@ Route::prefix('category')->group(function(){
     Route::get("/detail/{id}", [CategoryController::class, "detail"]);
     Route::post("/add", [CategoryController::class, "store"]);
     Route::put("/update/{id}", [CategoryController::class, "update"]);
-    Route::delete("/delete/{id}", [CategoryController::class, "destroy"]);
+    Route::delete("/delete/{id}", [CategoryController::class, "delete"]);
 });
 
 Route::prefix('author')->group(function(){
@@ -27,5 +27,5 @@ Route::prefix('author')->group(function(){
     Route::get("/detail/{id}", [AuthorController::class, "detail"]);
     Route::post("/add", [AuthorController::class, "store"]);
     Route::put("/update/{id}", [AuthorController::class, "update"]);
-    Route::delete("/delete/{id}", [AuthorController::class, "destroy"]);
+    Route::delete("/delete/{id}", [AuthorController::class, "delete"]);
 });
