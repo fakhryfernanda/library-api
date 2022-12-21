@@ -2,20 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
     function index()
     {
-        // $books = Book::all();
-        $books = DB::table('books')
-            ->join('authors', 'books.author_id', '=', 'authors.id')
-            ->join('categories', 'books.category_id', '=', 'categories.id')
-            ->select('books.title', 'authors.name AS author', 'categories.name AS category')
-            ->get();
+        $books = Book::all();
+
+        $authors = [];
+        $categories = [];
+
+        foreach ($books as $book) {
+            $book['author'] = Author::find($book['author_id']);
+            $book['category'] = Category::find($book['category_id']);
+            unset($book['author_id']);
+            unset($book['category_id']);
+        }
+        
+        // $books = Book::join('authors', 'books.author_id', '=', 'authors.id')
+        //     ->join('categories', 'books.category_id', '=', 'categories.id')
+        //     ->select('books.title', 'authors.name AS author', 'categories.name AS category')
+        //     ->get();
+
+        // $books = Book::join('authors', 'books.author_id', '=', 'authors.id')
+        //     ->join('categories', 'books.category_id', '=', 'categories.id')
+        //     ->select(
+        //                 'books.title', 
+        //                 'authors.id as id_author', 
+        //                 'authors.name AS author',
+        //                 'categories.id as id_category', 
+        //                 'categories.name AS category'
+        //             )
+        //     ->get();
+        
+        // dd($books[0]);
+        // dd($books[0]["title"]);
 
         return response()->json([
             "status" => true,
@@ -27,15 +52,22 @@ class BookController extends Controller
     function detail($id)
     {
         $book = Book::find($id);
-        
-        if (!isset($book)) {
+        $author = Author::find($book['author_id']);
+        $category = Category::find($book['category_id']);
+
+        if (!isset($book) or !isset($author) or !isset($category)) {
             return response()->json([
                 "status" => false,
-                "message" => "Buku tidak ditemukan",
+                "message" => "Data tidak ditemukan",
                 "data" => null
             ]);
         }
 
+        unset($book['author_id']);
+        unset($book['category_id']);
+        $book['author'] = $author;
+        $book['category'] = $category;
+        
         return response()->json([
             "status" => true,
             "message" => "",
@@ -46,10 +78,28 @@ class BookController extends Controller
     function store(Request $request)
     {
         $payload = $request->all();
-        if (!isset($payload["name"])) {
+        if (!isset($payload["title"])) {
             return response()->json([
                 "status" => false,
                 "message" => "Nama tidak boleh kosong",
+                "data" => null
+            ]);
+        }
+
+        $payload = $request->all();
+        if (!isset($payload["author_id"])) {
+            return response()->json([
+                "status" => false,
+                "message" => "Author tidak boleh kosong",
+                "data" => null
+            ]);
+        }
+
+        $payload = $request->all();
+        if (!isset($payload["category_id"])) {
+            return response()->json([
+                "status" => false,
+                "message" => "Kategori tidak boleh kosong",
                 "data" => null
             ]);
         }
