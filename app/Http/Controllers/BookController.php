@@ -25,11 +25,6 @@ class BookController extends Controller
         
         // $books = Book::join('authors', 'books.author_id', '=', 'authors.id')
         //     ->join('categories', 'books.category_id', '=', 'categories.id')
-        //     ->select('books.title', 'authors.name AS author', 'categories.name AS category')
-        //     ->get();
-
-        // $books = Book::join('authors', 'books.author_id', '=', 'authors.id')
-        //     ->join('categories', 'books.category_id', '=', 'categories.id')
         //     ->select(
         //                 'books.title', 
         //                 'authors.id as id_author', 
@@ -38,9 +33,6 @@ class BookController extends Controller
         //                 'categories.name AS category'
         //             )
         //     ->get();
-        
-        // dd($books[0]);
-        // dd($books[0]["title"]);
 
         return response()->json([
             "status" => true,
