@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('real_name');
+            $table->char('gender');
+            $table->date('birthdate');
+            $table->text('image');
             $table->timestamps();
         });
     }
