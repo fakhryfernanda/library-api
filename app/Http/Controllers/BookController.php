@@ -11,7 +11,7 @@ class BookController extends Controller
 {
     function index()
     {
-        $books = Book::all();
+        $books = Book::orderBy('id', 'ASC')->get();
 
         foreach ($books as $book) {
             $book['author'] = Author::find($book['author_id']);

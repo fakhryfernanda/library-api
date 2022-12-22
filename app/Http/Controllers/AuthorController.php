@@ -9,7 +9,7 @@ class AuthorController extends Controller
 {
     function index()
     {
-        $authors = Author::all();
+        $authors = Author::orderBy('id', 'ASC')->get();
         return response()->json([
             "status" => true,
             "message" => "",
