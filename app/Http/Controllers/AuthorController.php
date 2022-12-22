@@ -38,6 +38,7 @@ class AuthorController extends Controller
 
     function store(Request $request)
     {
+        dd($request);
         $payload = $request->all();
         if (!isset($payload["name"])) {
             return response()->json([
