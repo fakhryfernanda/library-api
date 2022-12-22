@@ -13,26 +13,12 @@ class BookController extends Controller
     {
         $books = Book::all();
 
-        $authors = [];
-        $categories = [];
-
         foreach ($books as $book) {
             $book['author'] = Author::find($book['author_id']);
             $book['category'] = Category::find($book['category_id']);
             unset($book['author_id']);
             unset($book['category_id']);
         }
-        
-        // $books = Book::join('authors', 'books.author_id', '=', 'authors.id')
-        //     ->join('categories', 'books.category_id', '=', 'categories.id')
-        //     ->select(
-        //                 'books.title', 
-        //                 'authors.id as id_author', 
-        //                 'authors.name AS author',
-        //                 'categories.id as id_category', 
-        //                 'categories.name AS category'
-        //             )
-        //     ->get();
 
         return response()->json([
             "status" => true,
@@ -70,28 +56,26 @@ class BookController extends Controller
     function store(Request $request)
     {
         $payload = $request->all();
-        if (!isset($payload["title"])) {
-            return response()->json([
-                "status" => false,
-                "message" => "Nama tidak boleh kosong",
-                "data" => null
-            ]);
+
+        $columns = ["isbn", "title", "author_id", "category_id", "publisher", "publication_date", "language", "cover_image"];
+        foreach($columns as $col) {
+            if (!isset($payload[$col])) {
+                $message = "{$col} tidak boleh kosong";
+                return response()->json([
+                    "status" => false,
+                    "message" => $message,
+                    "data" => null
+                ]);
+            }
         }
 
-        $payload = $request->all();
-        if (!isset($payload["author_id"])) {
-            return response()->json([
-                "status" => false,
-                "message" => "Author tidak boleh kosong",
-                "data" => null
-            ]);
-        }
+        $author = Author::find($payload['author_id']);
+        $category = Category::find($payload['category_id']);
 
-        $payload = $request->all();
-        if (!isset($payload["category_id"])) {
+        if (!isset($author) or !isset($category)) {
             return response()->json([
                 "status" => false,
-                "message" => "Kategori tidak boleh kosong",
+                "message" => "Author atau kategori tidak ditemukan",
                 "data" => null
             ]);
         }
