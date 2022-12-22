@@ -21,6 +21,7 @@ class AuthorController extends Controller
     {
         $author = Author::find($id);
 
+        // memeriksa apakah terdapat author dengan id sesuai yang diberikan
         if (!isset($author)) {
             return response()->json([
                 "status" => false,
@@ -38,16 +39,20 @@ class AuthorController extends Controller
 
     function store(Request $request)
     {
-        dd($request);
         $payload = $request->all();
-        if (!isset($payload["name"])) {
-            return response()->json([
-                "status" => false,
-                "message" => "Nama tidak boleh kosong",
-                "data" => null
-            ]);
+        
+        $columns = ["name", "real_name", "gender", "birthdate", "image"];
+        foreach($columns as $col) {
+            if (!isset($payload[$col])) {
+                $message = "{$col} tidak boleh kosong";
+                return response()->json([
+                    "status" => false,
+                    "message" => $message,
+                    "data" => null
+                ]);
+            }
         }
-
+        
         $author = Author::create($payload);
         return response()->json([
             "status" => true,
@@ -63,7 +68,8 @@ class AuthorController extends Controller
     function edit(Request $request, $id){
 
         $author = Author::find($id);
-
+        
+        // memeriksa apakah terdapat author dengan id sesuai yang diberikan
         if (!isset($author)) {
             return response()->json([
                 "status" => false,
@@ -72,7 +78,20 @@ class AuthorController extends Controller
             ]);
         }
 
-        $author->update($request->all());
+        $payload = $request->all();
+        $columns = ["name", "real_name", "gender", "birthdate", "image"];
+        foreach($columns as $col) {
+            if (!isset($payload[$col])) {
+                $message = "{$col} tidak boleh kosong";
+                return response()->json([
+                    "status" => false,
+                    "message" => $message,
+                    "data" => null
+                ]);
+            }
+        }
+
+        $author->update($payload);
 
         return response()->json([
             "status" => true,
